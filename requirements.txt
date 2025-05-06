@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+aiohttp
+orjson
+cryptography
+# requests 不使用异步的情况
