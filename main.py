@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 import importlib.util
@@ -49,7 +49,7 @@ async def api_main(Api_Main: Api_Main):
         raise HTTPException(status_code=404, detail=f"API '{apim}' not found")
     try:
         module = API_MODULES[apim]
-        async with AsyncRequest() as request:
+        async with AsyncRequest() as client:
             api_data = Api_Main.data.copy()
             if Api_Main.cookie is not None:
                 api_data['cookie'] = Api_Main.cookie
@@ -57,9 +57,31 @@ async def api_main(Api_Main: Api_Main):
                 api_data['proxy'] = Api_Main.proxy
             if Api_Main.realIP is not None:
                 api_data['realIP'] = Api_Main.realIP
-            result = await module.api(api_data, request=request)
+            result = await module.api(api_data, request=client)
             return result
-        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/{api_name}")
+async def get_api(api_name: str, request: Request):
+    api_data = dict(request.query_params)
+    if api_name not in API_MODULES:
+        raise HTTPException(status_code=404, detail=f"API '{api_name}' not found")
+    try:
+        module = API_MODULES[api_name]
+        async with AsyncRequest() as client:
+            if 'cookie' in api_data:
+                api_data['cookie'] = api_data['cookie']
+            elif 'cookie' in request.headers:
+                api_data['cookie'] = request.headers['cookie']
+            else:
+                api_data['cookie'] = {} # type: ignore
+            if 'proxy' in api_data:
+                api_data['proxy'] = api_data['proxy']
+            if 'realIP' in api_data:
+                api_data['realIP'] = api_data['realIP']
+            result = await module.api(api_data, request=client)
+            return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
