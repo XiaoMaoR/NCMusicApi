@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Response
+from api.template import api
 from utils.request_async import AsyncRequest
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
@@ -11,7 +12,6 @@ api_dir = os.path.join(os.path.dirname(__file__), 'api')
 app = FastAPI()
 
 class Api_Main(BaseModel):
-    api: str
     data: dict
     proxy: str | None = None
     realIP: str | None = None
@@ -69,9 +69,9 @@ def load_api_modules():
             except Exception as e:
                 print(f"Failed API module: {module_name}: {str(e)}")
 
-@app.post("/api-main")
-async def api_main(Api_Main: Api_Main):
-    apim = Api_Main.api
+@app.post("/api-post/{api_name}")
+async def api_main(api_name: str, Api_Main: Api_Main, request: Request, response: Response, setCookie: bool = True):
+    apim = api_name
     if apim not in API_MODULES:
         raise HTTPException(status_code=404, detail=f"API '{apim}' not found")
     try:
@@ -80,11 +80,23 @@ async def api_main(Api_Main: Api_Main):
             api_data = Api_Main.data.copy()
             if Api_Main.cookie is not None:
                 api_data['cookie'] = Api_Main.cookie
+            elif 'cookie' in request.headers:
+                cookie_header = request.headers['cookie']
+                cookie = SimpleCookie()
+                cookie.load(cookie_header)
+                api_data['cookie'] = {key: morsel.value for key, morsel in cookie.items()} # type: ignore
+            else:
+                api_data['cookie'] = {} # type: ignore
             if Api_Main.proxy is not None:
                 api_data['proxy'] = Api_Main.proxy
             if Api_Main.realIP is not None:
                 api_data['realIP'] = Api_Main.realIP
             result = await module.api(api_data, request=client)
+            if setCookie and 'cookie' in result:
+                cookie = result['cookie']
+                apply_cookies(response, cookie)
+            if setCookie == True:
+                return result.get('body', {})
             return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -97,9 +109,7 @@ async def get_api(api_name: str, request: Request, response: Response, setCookie
     try:
         module = API_MODULES[api_name]
         async with AsyncRequest() as client:
-            if 'cookie' in api_data:
-                api_data['cookie'] = api_data['cookie']
-            elif 'cookie' in request.headers:
+            if 'cookie' in request.headers:
                 cookie_header = request.headers['cookie']
                 cookie = SimpleCookie()
                 cookie.load(cookie_header)
