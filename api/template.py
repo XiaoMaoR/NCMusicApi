@@ -25,15 +25,4 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
     }
     )
 
-    body = result.get('body', {})
-
-    if result.get('status') != 200:
-        return result
-
-    return request.remove_empty({
-        "status": result.get("status", None),
-        "data": {
-            "field1": body.get("key1"),
-            "field2": body.get("key2"),
-        }
-    })
+    return result

@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
 
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
@@ -8,18 +8,26 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     return await _api(query, request)
 
 async def _api(query: Dict[str, Any], request: AsyncRequest):
-    ids = [id.strip() for id in query.get('ids', '').split(',')]
+    query['cookie'] = query.get('cookie', {})
+    query['cookie']['os'] = 'ios'
+    query['cookie']['appver'] = '8.10.90'
+
     data = {
-        'c': '[' + ','.join([f'{{"id":{id}}}' for id in ids]) + ']'
+        'birthday': query.get('birthday'),
+        'city': query.get('city'),
+        'gender': query.get('gender'),
+        'nickname': query.get('nickname'),
+        'province': query.get('province'),
+        'signature': query.get('signature'),
     }
 
     result = await request.create_request(
         method='POST',
-        url='https://music.163.com/api/v3/song/detail',
+        url='https://music.163.com/api/user/profile/update',
         data=data,
         options={
             'crypto': 'weapi',
-            'cookie': query.get('cookie', {}),
+            'cookie': query['cookie'],
             'proxy': query.get('proxy'),
             'realIP': query.get('realIP'),
         }

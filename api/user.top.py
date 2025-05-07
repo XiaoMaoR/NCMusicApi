@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
 
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
@@ -8,14 +8,19 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     return await _api(query, request)
 
 async def _api(query: Dict[str, Any], request: AsyncRequest):
-    ids = [id.strip() for id in query.get('ids', '').split(',')]
+    if query.get('type', 0) == "week":
+        type = 1
+    else:
+        type = 0
+
     data = {
-        'c': '[' + ','.join([f'{{"id":{id}}}' for id in ids]) + ']'
+        'uid': query['id'],
+        'type': type,
     }
 
     result = await request.create_request(
         method='POST',
-        url='https://music.163.com/api/v3/song/detail',
+        url='https://music.163.com/weapi/v1/play/record',
         data=data,
         options={
             'crypto': 'weapi',

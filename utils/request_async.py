@@ -1,4 +1,5 @@
 import asyncio
+from calendar import c
 import orjson
 import aiohttp
 import random
@@ -160,10 +161,12 @@ class AsyncRequest:
                     if status in {201, 302, 400, 502, 800, 801, 802, 803}:
                         status = 200
                     
+                    cookies_data = resp.cookies
+
                     return {
                         'status': status,
                         'body': body,
-                        'cookie': list(resp.cookies)
+                        'cookie': cookies_data
                     }
                     
             except Exception as e:

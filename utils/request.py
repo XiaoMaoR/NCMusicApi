@@ -6,6 +6,7 @@ import os
 import time
 from typing import Optional, Dict, Any
 from urllib.parse import urlencode
+import orjson
 from utils.crypto import random_string, weapi, linuxapi, eapi
 
 class Request:
@@ -139,18 +140,37 @@ class Request:
             data_param = urlencode(data) if method.upper() == 'POST' else data
             
             resp = request_fn(url, data=data_param, headers=headers, cookies=cookies)
-            body = resp.json()
+            content_type = resp.headers.get('Content-Type', '').lower()
+            if 'application/json' in content_type:
+                body = orjson.loads(resp.content)
+            elif 'text/plain' in content_type:
+                text = resp.text
+                try:
+                    body = orjson.loads(text)
+                except orjson.JSONDecodeError:
+                    return {
+                        'status': 502,
+                        'msg': f"Failed to decode JSON from text/plain response: {text}"
+                    }
+            else:
+                return {
+                    'status': 502,
+                    'msg': f"Unexpected Content-Type: {content_type}"
+                }
+            
             status = int(body.get('code', 500))
             if status in {201, 302, 400, 502, 800, 801, 802, 803}:
                 status = 200
             
+            cookies = resp.cookies
+
             return {
                 'status': status,
                 'body': body,
-                'cookie': list(resp.cookies)
+                'cookie': cookies
             }
             
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             return {
                 'status': 502,
                 'msg': str(e)

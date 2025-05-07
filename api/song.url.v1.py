@@ -1,6 +1,17 @@
 from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
 
+# 音质对照
+# LEVEL_MAP = {
+#     'standard': "标准音质",
+#     'exhigh': "极高音质",
+#     'lossless': "无损音质",
+#     'hires': "Hires音质",
+#     'sky': "沉浸环绕声",
+#     'jyeffect': "高清环绕声",
+#     'jymaster': "超清母带"
+# }
+
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     if request is None:
         async with AsyncRequest() as request:
@@ -11,7 +22,7 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
     data = {
         'ids': '[' + str(query.get('id')) + ']',
         'level': query.get('level', 'standard'),
-        'encodeType': 'flac',
+        'encodeType': 'flac'
     }
 
     if data['level'] == 'sky':
@@ -29,10 +40,5 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
             'url': '/api/song/enhance/player/url/v1',
         }
     )
-
-    body = result.get('body', {})
-
-    if result.get('status') != 200:
-        return result
 
     return result

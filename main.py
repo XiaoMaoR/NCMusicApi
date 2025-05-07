@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
+from utils.request_async import AsyncRequest
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
+from http.cookies import SimpleCookie
 import importlib.util
 import os
 import sys
-from utils.request_async import AsyncRequest
-
 API_MODULES = {}
 api_dir = os.path.join(os.path.dirname(__file__), 'api')
 app = FastAPI()
@@ -16,6 +16,33 @@ class Api_Main(BaseModel):
     proxy: str | None = None
     realIP: str | None = None
     cookie: dict | None = None
+
+def apply_cookies(response: Response, cookie_data):
+    cookies = SimpleCookie()
+    if isinstance(cookie_data, SimpleCookie):
+        cookies = cookie_data
+    elif isinstance(cookie_data, dict):
+        for key, val in cookie_data.items():
+            if isinstance(val, dict):
+                morsel = cookies[key]
+                morsel.set(key, val.get("value", ""), val.get("value", ""))
+                for attr_key, attr_val in val.items():
+                    morsel[attr_key.lower()] = str(attr_val)
+            else:
+                cookies[key] = val
+    elif isinstance(cookie_data, str):
+        cookies.load(cookie_data)
+    for morsel in cookies.values():
+        response.set_cookie(
+            key=morsel.key,
+            value=morsel.value,
+            path=morsel['path'] or '/',
+            expires=morsel['expires'] or None,
+            max_age=int(morsel['max-age']) if morsel['max-age'] else None,
+            secure=bool(morsel['secure']),
+            httponly=bool(morsel['httponly']),
+            samesite=morsel['samesite'] or None
+        )
 
 def load_module_from_file(filepath, module_name):
     spec = importlib.util.spec_from_file_location(module_name, filepath)
@@ -63,7 +90,7 @@ async def api_main(Api_Main: Api_Main):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/{api_name}")
-async def get_api(api_name: str, request: Request):
+async def get_api(api_name: str, request: Request, response: Response, setCookie: bool = True):
     api_data = dict(request.query_params)
     if api_name not in API_MODULES:
         raise HTTPException(status_code=404, detail=f"API '{api_name}' not found")
@@ -73,14 +100,24 @@ async def get_api(api_name: str, request: Request):
             if 'cookie' in api_data:
                 api_data['cookie'] = api_data['cookie']
             elif 'cookie' in request.headers:
-                api_data['cookie'] = request.headers['cookie']
+                cookie_header = request.headers['cookie']
+                cookie = SimpleCookie()
+                cookie.load(cookie_header)
+                api_data['cookie'] = {key: morsel.value for key, morsel in cookie.items()} # type: ignore
             else:
                 api_data['cookie'] = {} # type: ignore
             if 'proxy' in api_data:
                 api_data['proxy'] = api_data['proxy']
             if 'realIP' in api_data:
                 api_data['realIP'] = api_data['realIP']
+            else:
+                api_data['realIP'] = request.client.host # type: ignore
             result = await module.api(api_data, request=client)
+            if setCookie and 'cookie' in result:
+                cookie = result['cookie']
+                apply_cookies(response, cookie)
+            if setCookie == True:
+                return result.get('body', {})
             return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

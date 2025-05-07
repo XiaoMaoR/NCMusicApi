@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
 
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
@@ -8,20 +8,19 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     return await _api(query, request)
 
 async def _api(query: Dict[str, Any], request: AsyncRequest):
-    ids = [id.strip() for id in query.get('ids', '').split(',')]
-    data = {
-        'c': '[' + ','.join([f'{{"id":{id}}}' for id in ids]) + ']'
-    }
+    data = {}
+    key = 'userdata' if query['year'] in ['2017', '2018', '2019'] else 'data'
 
     result = await request.create_request(
         method='POST',
-        url='https://music.163.com/api/v3/song/detail',
+        url=f'https://music.163.com/weapi/activity/summary/annual/{query["year"]}/{key}',
         data=data,
         options={
-            'crypto': 'weapi',
+            'crypto': 'eapi',
             'cookie': query.get('cookie', {}),
             'proxy': query.get('proxy'),
             'realIP': query.get('realIP'),
+            'url': f'/api/activity/summary/annual/{query["year"]}/{key}',
         }
     )
 

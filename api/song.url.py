@@ -30,9 +30,6 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
     )
 
     body = result.get('body', {})
-    if result.get('status') != 200:
-        return result
-
     if 'data' in body:
         body['data'].sort(key=lambda x: ids.index(str(x['id'])))
 

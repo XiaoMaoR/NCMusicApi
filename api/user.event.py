@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
 
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
@@ -8,17 +8,24 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     return await _api(query, request)
 
 async def _api(query: Dict[str, Any], request: AsyncRequest):
-    ids = [id.strip() for id in query.get('ids', '').split(',')]
+    if 'cookie' not in query:
+        query['cookie'] = {}
+    query['cookie']['os'] = 'ios'
+    query['cookie']['appver'] = '8.10.90'
+
     data = {
-        'c': '[' + ','.join([f'{{"id":{id}}}' for id in ids]) + ']'
+        'getcounts': True,
+        'time': query.get('lasttime', -1),
+        'limit': query.get('limit', 30),
+        'total': False,
     }
 
     result = await request.create_request(
         method='POST',
-        url='https://music.163.com/api/v3/song/detail',
+        url=f'https://music.163.com/api/event/get/{query.get("id")}',
         data=data,
         options={
-            'crypto': 'weapi',
+            'crypto': 'api',
             'cookie': query.get('cookie', {}),
             'proxy': query.get('proxy'),
             'realIP': query.get('realIP'),

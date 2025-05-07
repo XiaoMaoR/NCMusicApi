@@ -1,5 +1,6 @@
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
+import orjson
 
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     if request is None:
@@ -8,15 +9,10 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     return await _api(query, request)
 
 async def _api(query: Dict[str, Any], request: AsyncRequest):
-    ids = [id.strip() for id in query.get('ids', '').split(',')]
-    data = {
-        'c': '[' + ','.join([f'{{"id":{id}}}' for id in ids]) + ']'
-    }
-
     result = await request.create_request(
         method='POST',
-        url='https://music.163.com/api/v3/song/detail',
-        data=data,
+        url=f'https://music.163.com/weapi/v1/user/detail/{query.get("id")}',
+        data={},
         options={
             'crypto': 'weapi',
             'cookie': query.get('cookie', {}),
@@ -24,5 +20,10 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
             'realIP': query.get('realIP'),
         }
     )
+
+    result_bytes = orjson.dumps(result)
+    replaced_bytes = result_bytes.replace(b'avatarImgId_str', b'avatarImgIdStr')
+
+    result = orjson.loads(replaced_bytes)
 
     return result

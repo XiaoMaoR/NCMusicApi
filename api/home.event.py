@@ -25,7 +25,4 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
         }
     )
 
-    if result.get('status') != 200:
-        return result
-
     return result
