@@ -27,9 +27,9 @@ pip install -r requirements.txt
 ### 3. 启动服务
 ```bash
 # Python
-python server.py
+python main.py
 # Windows
-start.bat
+.\start.bat
 # Linux / MacOS
 chmod +x start.sh
 ./start.sh
