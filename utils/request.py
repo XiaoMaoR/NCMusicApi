@@ -112,21 +112,17 @@ class Request:
             csrf_token = cookies.get('__csrf', '')
             eapi_headers = {
                 'osver': cookies.get('osver'),
-                'deviceId': cookies.get('deviceId'),
+                'deviceId': cookies.get('deviceId', 'XiaoMaoCl'),
                 'appver': cookies.get('appver', '8.9.70'),
                 'versioncode': cookies.get('versioncode', '140'),
                 'mobilename': cookies.get('mobilename'),
                 'buildver': cookies.get('buildver', str(int(time.time()))[:10]),
                 'resolution': cookies.get('resolution', '1920x1080'),
-                '__csrf': csrf_token,
-                'os': cookies.get('os', 'android'),
+                # '__csrf': csrf_token,
+                'os': cookies.get('os', 'pc'),
                 'channel': cookies.get('channel'),
                 'requestId': f"{int(time.time() * 1000)}_{random.randint(0, 9999):04d}"
             }
-            if 'MUSIC_U' in cookies:
-                eapi_headers['MUSIC_U'] = cookies['MUSIC_U']
-            if 'MUSIC_A' in cookies:
-                eapi_headers['MUSIC_A'] = cookies['MUSIC_A']
             headers['Cookie'] = '; '.join(f'{k}={v}' for k, v in eapi_headers.items())
             data['header'] = eapi_headers
             data = eapi(options.get('url', url), data)

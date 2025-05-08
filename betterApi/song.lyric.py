@@ -72,7 +72,7 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
                 "content": body.get("klyric", {}).get("lyric"),
             },
 
-            "lyric_romlrc": {
+            "lyric_rom": {
                 "version": body.get("romalrc", {}).get("version"),
                 "content": body.get("romalrc", {}).get("lyric"),
             },

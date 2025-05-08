@@ -22,6 +22,7 @@ async def _api(query: Dict[str, Any], request: AsyncRequest):
         'status': 200,
         "body": {
             'url': f'https://music.163.com/login?codekey={query.get('key')}',
+            'qrurl': f"https://api.2dcode.biz/v1/create-qr-code?data=https://music.163.com/login?codekey={query.get('key')}",
             'code': 200
         },
         'cookie': None
