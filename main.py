@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request, Response
-from api.template import api
+from fastapi.responses import PlainTextResponse, FileResponse
 from utils.request_async import AsyncRequest
-from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 from http.cookies import SimpleCookie
 import importlib.util
@@ -136,6 +135,10 @@ async def get_api(api_name: str, request: Request, response: Response, setCookie
 async def index():
     api_list_text = "\n".join(API_MODULES.keys())
     return f"NCM-Api\nWelcome to the NCM-Api Server!\nBy XiaoMaoR\n\nAPI List:\n{api_list_text}\n\nQQ:1072755450"
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("./favicon.ico")
 
 if __name__ == "__main__":
     print(r"""  _  _  ___ __  __      _        _ 

@@ -26,7 +26,13 @@ pip install -r requirements.txt
 
 ### 3. 启动服务
 ```bash
+# Python
 python server.py
+# Windows
+start.bat
+# Linux / MacOS
+chmod +x start.sh
+./start.sh
 ```
 
 ## 🧪 常用接口示例
