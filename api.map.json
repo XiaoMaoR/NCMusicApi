@@ -1,1 +1,701 @@
-{}
+{
+  "api": [
+    {
+      "class": "artist.desc",
+      "url": "/artistdesc",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "歌手ID"
+        }
+      ],
+      "description": "获取歌手简介",
+      "_originalIndex": 0
+    },
+    {
+      "class": "artist.fans",
+      "url": "/artistfans",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "歌手ID"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认20)"
+        },
+        {
+          "name": "offset",
+          "type": "num",
+          "required": false,
+          "description": "页数(默认0)"
+        }
+      ],
+      "description": "获取歌手粉丝列表",
+      "_originalIndex": 1
+    },
+    {
+      "class": "artist.main",
+      "url": "/artistmain",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "歌手ID"
+        }
+      ],
+      "description": "获取歌手主页",
+      "_originalIndex": 2
+    },
+    {
+      "class": "artist.self",
+      "url": "/artistself",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "歌手ID"
+        }
+      ],
+      "description": "获取歌手信息",
+      "_originalIndex": 3
+    },
+    {
+      "class": "comments.hot",
+      "url": "/commentshot",
+      "param": [
+        {
+          "name": "type",
+          "type": "num",
+          "required": false,
+          "description": "资源类型(单曲:0,歌单:1,专辑:3,电台节目:4,视频:5,动态:6,电台:7)"
+        },
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认20)"
+        },
+        {
+          "name": "offset",
+          "type": "num",
+          "required": false,
+          "description": "页数(默认0)"
+        },
+        {
+          "name": "before",
+          "type": "num",
+          "required": false,
+          "description": "分页(取上一页最后一项的time,多评论需要使用)"
+        }
+      ],
+      "description": "获取热门评论",
+      "_originalIndex": 4
+    },
+    {
+      "class": "home.ball",
+      "url": "/homeball",
+      "param": [],
+      "description": "获取首页发现小球",
+      "_originalIndex": 5
+    },
+    {
+      "class": "home.banner",
+      "url": "/homebanner",
+      "param": [
+        {
+          "name": "type",
+          "type": "num",
+          "required": false,
+          "description": "客户端类型(默认PC)(PC:0,安卓:1,iPhone:2,iPad:3)"
+        }
+      ],
+      "description": "获取首页轮播图",
+      "_originalIndex": 6
+    },
+    {
+      "class": "home.event",
+      "url": "/homeevent",
+      "param": [
+        {
+          "name": "pagesize",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认20)"
+        },
+        {
+          "name": "lasttime",
+          "type": "num",
+          "required": false,
+          "description": "分页(默认-1)(取返回的lasttime)"
+        }
+      ],
+      "description": "获取首页动态(需登录)",
+      "_originalIndex": 7
+    },
+    {
+      "class": "home.page",
+      "url": "/homepage",
+      "param": [
+        {
+          "name": "refresh",
+          "type": "bool",
+          "required": false,
+          "description": "是否刷新数据(默认否)"
+        }
+      ],
+      "description": "获取首页发现",
+      "_originalIndex": 8
+    },
+    {
+      "class": "login.anonymous",
+      "url": "/loginanonymous",
+      "param": [],
+      "description": "匿名登录",
+      "_originalIndex": 9
+    },
+    {
+      "class": "login.qr.get",
+      "url": "/loginqrget",
+      "param": [
+        {
+          "name": "key",
+          "type": "str",
+          "required": true,
+          "description": "二维码密钥"
+        }
+      ],
+      "description": "获取二维码登录状态",
+      "_originalIndex": 10
+    },
+    {
+      "class": "login.qr.key",
+      "url": "/loginqrkey",
+      "param": [],
+      "description": "获取二维码登录密钥",
+      "_originalIndex": 11
+    },
+    {
+      "class": "login.qr.url",
+      "url": "/loginqrurl",
+      "param": [
+        {
+          "name": "key",
+          "type": "str",
+          "required": true,
+          "description": "二维码密钥"
+        }
+      ],
+      "description": "获取二维码URL",
+      "_originalIndex": 12
+    },
+    {
+      "class": "other.summary",
+      "url": "/othersummary",
+      "param": [
+        {
+          "name": "year",
+          "type": "str",
+          "required": true,
+          "description": "年度"
+        }
+      ],
+      "description": "获取年度总结(需登录)",
+      "_originalIndex": 13
+    },
+    {
+      "class": "search.main",
+      "url": "/searchmain",
+      "param": [
+        {
+          "name": "keywords",
+          "type": "str",
+          "required": true,
+          "description": "搜索关键词"
+        },
+        {
+          "name": "type",
+          "type": "num",
+          "required": false,
+          "description": "搜索类型(默认单曲)(单曲:1,专辑:2,歌手:3,歌单:4,用户:5,MV:6,歌词:7,电台:8,视频:9)"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认20)"
+        },
+        {
+          "name": "page",
+          "type": "num",
+          "required": false,
+          "description": "页数(默认0)"
+        }
+      ],
+      "description": "搜索音乐内容",
+      "_originalIndex": 14
+    },
+    {
+      "class": "song.download",
+      "url": "/songdownload",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "单曲ID"
+        },
+        {
+          "name": "br",
+          "type": "num",
+          "required": false,
+          "description": "比特率(默认999000)"
+        }
+      ],
+      "description": "获取单曲下载链接(需登录)",
+      "_originalIndex": 15
+    },
+    {
+      "class": "song.lyric",
+      "url": "/songlyric",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "单曲ID"
+        }
+      ],
+      "description": "获取单曲歌词",
+      "_originalIndex": 16
+    },
+    {
+      "class": "song.lyric.v1",
+      "url": "/songlyricv1",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "单曲ID"
+        }
+      ],
+      "description": "获取单曲歌词(包含逐字)",
+      "_originalIndex": 17
+    },
+    {
+      "class": "song.main",
+      "url": "/songmain",
+      "param": [
+        {
+          "name": "id",
+          "type": "str",
+          "required": true,
+          "description": "单曲ID(列表使用,分割)"
+        }
+      ],
+      "description": "获取单曲详细信息",
+      "_originalIndex": 18
+    },
+    {
+      "class": "song.match",
+      "url": "/songmatch",
+      "param": [
+        {
+          "name": "duration",
+          "type": "num",
+          "required": false,
+          "description": "音频时长(默认：0)"
+        },
+        {
+          "name": "audioFP",
+          "type": "str",
+          "required": true,
+          "description": "音频指纹Base64"
+        }
+      ],
+      "description": "听歌识曲",
+      "_originalIndex": 19
+    },
+    {
+      "class": "song.top",
+      "url": "/songtop",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": ".?"
+        }
+      ],
+      "description": "获取单曲排行榜信息",
+      "_originalIndex": 20
+    },
+    {
+      "class": "song.ugc",
+      "url": "/songugc",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "单曲ID"
+        }
+      ],
+      "description": "获取单曲简要百科",
+      "_originalIndex": 21
+    },
+    {
+      "class": "song.url",
+      "url": "/songurl",
+      "param": [
+        {
+          "name": "id",
+          "type": "str",
+          "required": true,
+          "description": "单曲ID(列表使用,分割)"
+        },
+        {
+          "name": "br",
+          "type": "num",
+          "required": false,
+          "description": "比特率(默认999000)"
+        }
+      ],
+      "description": "获取单曲播放链接",
+      "_originalIndex": 22
+    },
+    {
+      "class": "song.url.v1",
+      "url": "/songurlv1",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "歌曲的唯一标识符"
+        },
+        {
+          "name": "level",
+          "type": "str",
+          "required": false,
+          "description": "音质级别(默认standard)(标准音质:standard,极高音质:exhigh,无损音质:lossless,Hires音质:hires,沉浸环绕声:sky,高清环绕声:jyeffect,超清母带:jymaster)"
+        }
+      ],
+      "description": "获取单曲播放链接v1",
+      "_originalIndex": 23
+    },
+    {
+      "class": "song.wiki",
+      "url": "/songwiki",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "单曲ID"
+        }
+      ],
+      "description": "获取单曲百科",
+      "_originalIndex": 24
+    },
+    {
+      "class": "template",
+      "url": "/template",
+      "param": [
+        {
+          "name": "param1",
+          "type": "num",
+          "required": true,
+          "description": "参数描述1"
+        },
+        {
+          "name": "param2",
+          "type": "str",
+          "required": false,
+          "description": "参数描述2"
+        }
+      ],
+      "description": "Api模块通用实例",
+      "_originalIndex": 25
+    },
+    {
+      "class": "template.copy",
+      "url": "/template/copy",
+      "param": [
+        {
+          "name": "param1",
+          "type": "num",
+          "required": true,
+          "description": "参数描述1"
+        },
+        {
+          "name": "param2",
+          "type": "str",
+          "required": false,
+          "description": "参数描述2"
+        }
+      ],
+      "description": "Api模块通用实例备份",
+      "_originalIndex": 26
+    },
+    {
+      "class": "user.calendar",
+      "url": "/usercalendar",
+      "param": [
+        {
+          "name": "startTime",
+          "type": "num",
+          "required": false,
+          "description": "开始时间(毫秒时间戳,默认当前时间)"
+        },
+        {
+          "name": "endTime",
+          "type": "num",
+          "required": false,
+          "description": "结束时间(毫秒时间戳,默认当前时间)"
+        }
+      ],
+      "description": "获取用户每日",
+      "_originalIndex": 27
+    },
+    {
+      "class": "user.event",
+      "url": "/userevent",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "用户ID"
+        },
+        {
+          "name": "lasttime",
+          "type": "num",
+          "required": false,
+          "description": "分页(默认-1)(取返回的lasttime)"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认30)"
+        }
+      ],
+      "description": "获取用户动态",
+      "_originalIndex": 28
+    },
+    {
+      "class": "user.fans",
+      "url": "/userfans",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "用户ID"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认30)"
+        },
+        {
+          "name": "offset",
+          "type": "num",
+          "required": false,
+          "description": "页数(默认0)"
+        }
+      ],
+      "description": "获取用户粉丝列表",
+      "_originalIndex": 29
+    },
+    {
+      "class": "user.follows",
+      "url": "/userfollows",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "用户ID"
+        },
+        {
+          "name": "offset",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认30)"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "页数(默认0)"
+        }
+      ],
+      "description": "获取用户关注列表",
+      "_originalIndex": 30
+    },
+    {
+      "class": "user.getid",
+      "url": "/usergetid",
+      "param": [
+        {
+          "name": "nicknames",
+          "type": "str",
+          "required": true,
+          "description": "用户昵称(列表使用,分割)"
+        }
+      ],
+      "description": "根据昵称获取用户ID",
+      "_originalIndex": 31
+    },
+    {
+      "class": "user.info",
+      "url": "/userinfo",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "用户ID"
+        }
+      ],
+      "description": "获取用户详细信息",
+      "_originalIndex": 32
+    },
+    {
+      "class": "user.name",
+      "url": "/username",
+      "param": [
+        {
+          "name": "name",
+          "type": "str",
+          "required": true,
+          "description": "昵称"
+        }
+      ],
+      "description": "检查昵称是否重复",
+      "_originalIndex": 33
+    },
+    {
+      "class": "user.playlist",
+      "url": "/userplaylist",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "用户ID"
+        },
+        {
+          "name": "limit",
+          "type": "num",
+          "required": false,
+          "description": "每页数量(默认30)"
+        },
+        {
+          "name": "offset",
+          "type": "num",
+          "required": false,
+          "description": "分页偏移量（默认：0）"
+        }
+      ],
+      "description": "获取用户的播放列表",
+      "_originalIndex": 34
+    },
+    {
+      "class": "user.signin",
+      "url": "/usersignin",
+      "param": [
+        {
+          "name": "type",
+          "type": "num",
+          "required": false,
+          "description": "页数(默认0)"
+        }
+      ],
+      "description": "用户签到",
+      "_originalIndex": 35
+    },
+    {
+      "class": "user.top",
+      "url": "/usertop",
+      "param": [
+        {
+          "name": "id",
+          "type": "num",
+          "required": true,
+          "description": "用户ID"
+        },
+        {
+          "name": "type",
+          "type": "num",
+          "required": false,
+          "description": "时间范围(默认0)(所有时间:0,最近一周1)"
+        }
+      ],
+      "description": "获取用户的播放记录",
+      "_originalIndex": 36
+    },
+    {
+      "class": "user.update",
+      "url": "/userupdate",
+      "param": [
+        {
+          "name": "birthday",
+          "type": "str",
+          "required": false,
+          "description": "生日"
+        },
+        {
+          "name": "city",
+          "type": "str",
+          "required": false,
+          "description": "城市"
+        },
+        {
+          "name": "gender",
+          "type": "str",
+          "required": false,
+          "description": "性别"
+        },
+        {
+          "name": "nickname",
+          "type": "str",
+          "required": false,
+          "description": "昵称"
+        },
+        {
+          "name": "province",
+          "type": "str",
+          "required": false,
+          "description": "省份"
+        },
+        {
+          "name": "signature",
+          "type": "str",
+          "required": false,
+          "description": "个性签名"
+        }
+      ],
+      "description": "更新用户个人信息",
+      "_originalIndex": 37
+    }
+  ]
+}

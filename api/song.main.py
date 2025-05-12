@@ -8,7 +8,7 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
     return await _api(query, request)
 
 async def _api(query: Dict[str, Any], request: AsyncRequest):
-    ids = [id.strip() for id in query.get('ids', '').split(',')]
+    ids = [id.strip() for id in query.get('id', '').split(',')]
     data = {
         'c': '[' + ','.join([f'{{"id":{id}}}' for id in ids]) + ']'
     }

@@ -140,6 +140,15 @@ async def index():
 async def favicon():
     return FileResponse("./favicon.ico")
 
+@app.get("/apidocs{mode}")
+async def apidocs(mode: str = "UI"):
+    if mode == "UI":
+        return FileResponse("./apidocs.html")
+    elif mode == "JSON":
+        return FileResponse("./api.map.json")
+    else:
+        raise HTTPException(status_code=400, detail="Invalid mode")
+
 if __name__ == "__main__":
     print(r"""  _  _  ___ __  __      _        _ 
  | \| |/ __|  \/  |___ /_\  _ __(_)
@@ -150,4 +159,10 @@ if __name__ == "__main__":
     load_api_modules()
     print("Starting API server...")
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=80)
+    uvicorn.run(
+        app, 
+        host="127.0.0.1", 
+        port=80, 
+        timeout_keep_alive=30, 
+        log_level="info"
+    )

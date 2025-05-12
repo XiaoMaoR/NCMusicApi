@@ -2,15 +2,15 @@ from typing import Optional, Dict, Any
 from utils.request_async import AsyncRequest
 
 TYPE_MAP = {
-    'song': 1,       # 单曲
-    'album': 10,     # 专辑
-    'artist': 100,   # 歌手
-    'playlist': 1000,# 歌单
-    'user': 1002,    # 用户
-    'mv': 1004,      # MV
-    'lyrics': 1006,  # 歌词
-    'radio': 1009,   # 电台
-    'video': 1014    # 视频
+    1: 1,      # 单曲
+    2: 10,     # 专辑
+    3: 100,    # 歌手
+    4: 1000,   # 歌单
+    5: 1002,   # 用户
+    6: 1004,   # MV
+    7: 1006,   # 歌词
+    8: 1009,   # 电台
+    9: 1014    # 视频
 }
 
 async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
@@ -22,7 +22,7 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
 async def _api(query: Dict[str, Any], request: AsyncRequest):
     data = {
         's': query.get('keywords'),
-        'type': TYPE_MAP.get(str(query.get('type', "song")), 1),
+        'type': TYPE_MAP.get(int(query.get('type', "song")), 1),
         'limit': query.get('limit', 30),
         'offset': query.get('page', 0),
     }

@@ -1,5 +1,4 @@
 import asyncio
-from calendar import c
 import orjson
 import aiohttp
 import random

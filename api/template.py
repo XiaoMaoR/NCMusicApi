@@ -10,7 +10,7 @@ async def api(query: Dict[str, Any], request: Optional[AsyncRequest] = None):
 async def _api(query: Dict[str, Any], request: AsyncRequest):
     data = {
         'key1': query.get('param1'),
-        'key2': query.get('param2'),
+        'key2': query.get('param2',"test"),
     }
 
     result = await request.create_request(
