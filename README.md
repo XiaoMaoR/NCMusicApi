@@ -45,7 +45,8 @@ chmod +x start.sh
 | 搜索歌曲| `/api/search.main?keywords=搜索内容&type=song`|
 | 更多接口| `/api/{Api名称}`|
 
-参考   [在线Demo >>> https://ncmapi.rlmk.cc](https://ncmapi.rlmk.cc)
+参考   [在线Demo >>> https://ncmapi.rlmk.cc](https://ncmapi.rlmk.cc/apidocsUI)
+Tip:(文档未完全完成时请使用 /api/{Api名称} 进行稳定请求)
 
 ## 📌 使用注意
 - 🚫 **请勿对公开 Demo 地址发起压测谢谢!**
@@ -58,7 +59,7 @@ chmod +x start.sh
 - [x] 智能缓存
 - [ ] 完整接口支持
 - [ ] 接口结构优化
-- [ ] 完整文档
+- [x] 完整文档?
 
 ## ❤️ 鸣谢
 - 🎧 网易云音乐官方 Web 接口
